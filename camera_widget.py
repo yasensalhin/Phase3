@@ -70,12 +70,25 @@ class CameraWidget(QWidget):
             ret, frame = self.cap.read()
             if ret:
                 frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-                # resized=self.rescaleFrame(frame,3)
                 h, w, ch = frame.shape
                 bytes_per_line = ch * w
                 image = QImage(frame.data, w, h, bytes_per_line, QImage.Format_RGB888)
-                self.label.setPixmap(QPixmap.fromImage(image))
+                pixmap = QPixmap.fromImage(image)
 
+            
+                label_w = self.label.width()
+                label_h = self.label.height()
+
+            
+                pixmap = QPixmap.fromImage(image)
+                self.label.setPixmap(
+                    pixmap.scaled(
+                        self.label.width(),
+                        self.label.height(),
+                        Qt.IgnoreAspectRatio,         
+                        Qt.SmoothTransformation        
+                )
+                )
 
     def rescaleFrame(size,frame,scale=0.75):
         width=(int)(frame.shape[1]*scale)
@@ -89,3 +102,6 @@ if __name__ == "__main__":
     w = CameraWidget()
     w.show()
     app.exec()
+
+    app.exec()
+
